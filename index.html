@@ -11,56 +11,55 @@
       padding: 50px;
     }
 
-    a.app-link {
-      display: inline-block;
+    .btn {
       padding: 15px 25px;
       font-size: 16px;
       background-color: #1877f2;
       color: white;
-      text-decoration: none;
+      border: none;
       border-radius: 8px;
-      transition: background-color 0.2s;
+      cursor: pointer;
+      text-decoration: none;
     }
 
-    a.app-link:hover {
+    .btn:hover {
       background-color: #145dbf;
     }
   </style>
 </head>
 <body>
-  <h1>Abra o Facebook App</h1>
-  <p>Clique no link abaixo para abrir o aplicativo.</p>
-  <a href="#" class="app-link" onclick="openApp(event)">Abrir Facebook App</a>
+
+  <h1>Abrir o app do Facebook</h1>
+  <p>Clique no botão abaixo para abrir o aplicativo.</p>
+
+  <a href="#" class="btn" onclick="openFacebookOrStore()">Abrir Facebook App</a>
 
   <script>
-    const iosAppLink = "https://apps.apple.com/br/app/facebook/id284882215";
-    const androidAppLink = "https://play.google.com/store/apps/details?id=com.facebook.katana&hl=pt_BR";
-    const appScheme = "fb://"; // URI scheme do Facebook
+    function openFacebookOrStore() {
+      const isAndroid = /Android/i.test(navigator.userAgent);
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    function isIOS() {
-      return /iPhone|iPad|iPod/i.test(navigator.userAgent);
-    }
+      const btn = document.querySelector('.btn');
+      if (btn) {
+        btn.textContent = 'Abrindo...';
+        btn.style.backgroundColor = '#4e7ac7';
+      }
 
-    function isAndroid() {
-      return /Android/i.test(navigator.userAgent);
-    }
-
-    function openApp(event) {
-      event.preventDefault(); // Impede o comportamento padrão do <a>
-
-      const fallbackTimeout = 1500;
-      window.location = appScheme;
-
-      setTimeout(() => {
-        if (isIOS()) {
-          window.location = iosAppLink;
-        } else if (isAndroid()) {
-          window.location = androidAppLink;
-        } else {
-          window.location = "https://www.facebook.com"; // Fallback no desktop
-        }
-      }, fallbackTimeout);
+      if (isAndroid) {
+        // Android: abre o app com fallback automático para a Play Store
+        window.location.href = "intent://facebook.com/#Intent;scheme=fb;package=com.facebook.katana;S.browser_fallback_url=https://play.google.com/store/apps/details?id=com.facebook.katana;end";
+      } else if (isIOS) {
+        // iOS: tenta abrir o app e depois cai para App Store se falhar
+        window.location = "fb://profile";
+        setTimeout(() => {
+          window.location = "https://apps.apple.com/br/app/facebook/id284882215";
+        }, 800);
+      } else {
+        // Desktop: vai pro site do Facebook
+        window.location.href = "https://www.facebook.com";
+      }
     }
   </script>
+
 </body>
 </html>

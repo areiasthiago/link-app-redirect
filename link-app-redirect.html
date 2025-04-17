@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <title>Abrir Facebook App</title>
+  <title>Teste de solução "One Link"</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
@@ -11,25 +11,26 @@
       padding: 50px;
     }
 
-    button {
+    a.app-link {
+      display: inline-block;
       padding: 15px 25px;
       font-size: 16px;
       background-color: #1877f2;
       color: white;
-      border: none;
+      text-decoration: none;
       border-radius: 8px;
-      cursor: pointer;
+      transition: background-color 0.2s;
     }
 
-    button:hover {
+    a.app-link:hover {
       background-color: #145dbf;
     }
   </style>
 </head>
 <body>
   <h1>Abra o app do Facebook</h1>
-  <p>Clique no botão abaixo para abrir o aplicativo.</p>
-  <button onclick="openApp()">Abrir Facebook App</button>
+  <p>Clique no link abaixo para abrir o aplicativo.</p>
+  <a href="#" class="app-link" onclick="openApp()">Abrir Facebook App</a>
 
   <script>
     const iosAppLink = "https://apps.apple.com/br/app/facebook/id284882215";
@@ -44,20 +45,19 @@
       return /Android/i.test(navigator.userAgent);
     }
 
-    function openApp() {
-      const fallbackTimeout = 1500;
+    function openApp(event) {
+      event.preventDefault(); // Impede o comportamento padrão do <a>
 
-      // Tenta abrir o app
+      const fallbackTimeout = 1500;
       window.location = appScheme;
 
-      // Se não abrir, redireciona pra loja após timeout
       setTimeout(() => {
         if (isIOS()) {
           window.location = iosAppLink;
         } else if (isAndroid()) {
           window.location = androidAppLink;
         } else {
-          window.location = "https://www.facebook.com"; // Desktop fallback
+          window.location = "https://www.facebook.com"; // Fallback no desktop
         }
       }, fallbackTimeout);
     }

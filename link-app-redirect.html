@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Abrir App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+  <p>Redirecionando...</p>
+
+  <script>
+    // Define os links
+    const iosAppLink = "https://apps.apple.com/br/app/seu-app-id";
+    const androidAppLink = "https://play.google.com/store/apps/details?id=com.seuapp.id";
+    const appScheme = "seuapp://home"; // Ex: whatsapp://, twitter://, meuapp:// etc.
+
+    function isIOS() {
+      return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+
+    function isAndroid() {
+      return /Android/i.test(navigator.userAgent);
+    }
+
+    function isMobile() {
+      return isIOS() || isAndroid();
+    }
+
+    function openApp() {
+      const fallbackTimeout = 1500;
+
+      // Tenta abrir o app
+      window.location = appScheme;
+
+      // Se não abrir em até X milissegundos, redireciona pra loja
+      setTimeout(() => {
+        if (isIOS()) {
+          window.location = iosAppLink;
+        } else if (isAndroid()) {
+          window.location = androidAppLink;
+        } else {
+          window.location = "https://www.seusite.com.br/app"; // Desktop fallback
+        }
+      }, fallbackTimeout);
+    }
+
+    // Executa automaticamente ao abrir a página
+    openApp();
+  </script>
+</body>
+</html>

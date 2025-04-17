@@ -2,17 +2,39 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <title>Abrir App</title>
+  <title>Abrir Facebook App</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+
+    button {
+      padding: 15px 25px;
+      font-size: 16px;
+      background-color: #1877f2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #145dbf;
+    }
+  </style>
 </head>
 <body>
-  <p>Redirecionando...</p>
+  <h1>Abra o app do Facebook</h1>
+  <p>Clique no botão abaixo para abrir o aplicativo.</p>
+  <button onclick="openApp()">Abrir Facebook App</button>
 
   <script>
-    // Define os links
     const iosAppLink = "https://apps.apple.com/br/app/facebook/id284882215";
     const androidAppLink = "https://play.google.com/store/apps/details?id=com.facebook.katana&hl=pt_BR";
-    const appScheme = "seuapp://facebook"; // Ex: whatsapp://, twitter://, meuapp:// etc.
+    const appScheme = "fb://"; // URI scheme do Facebook
 
     function isIOS() {
       return /iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -22,30 +44,23 @@
       return /Android/i.test(navigator.userAgent);
     }
 
-    function isMobile() {
-      return isIOS() || isAndroid();
-    }
-
     function openApp() {
       const fallbackTimeout = 1500;
 
       // Tenta abrir o app
       window.location = appScheme;
 
-      // Se não abrir em até X milissegundos, redireciona pra loja
+      // Se não abrir, redireciona pra loja após timeout
       setTimeout(() => {
         if (isIOS()) {
           window.location = iosAppLink;
         } else if (isAndroid()) {
           window.location = androidAppLink;
         } else {
-          window.location = "https://www.seusite.com.br/app"; // Desktop fallback
+          window.location = "https://www.facebook.com"; // Desktop fallback
         }
       }, fallbackTimeout);
     }
-
-    // Executa automaticamente ao abrir a página
-    openApp();
   </script>
 </body>
 </html>
